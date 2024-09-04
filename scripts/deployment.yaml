@@ -1,0 +1,68 @@
+# Specifies the API version being used. The apps/v1 version is appropriate for deploying applications.
+apiVersion: apps/v1
+# Declares the type of Kubernetes resource being created, in this case, a Deployment.
+kind: Deployment
+# Metadata section provides identifying information about the resource.
+metadata:
+  # The name of the Deployment, which must be unique within the namespace.
+  name: book-catalog
+# Specifies the desired state for the deployment.
+spec:
+  # Number of pod replicas to be created. This ensures that two pods will be running.
+  replicas: 2
+  # Selector is used to identify which Pods the Deployment will manage.
+  selector:
+    matchLabels:
+      # This label is used to match pods that will be managed by this Deployment.
+      app: book-catalog
+  # Template defines the pods that will be created by this deployment.
+  template:
+    # Metadata for the pods created by this template.
+    metadata:
+      labels:
+        # Labels are key/value pairs that are attached to objects. In this case, the app label is used to identify the application.
+        app: book-catalog
+    # Specification of the containers that will run in the pods.
+    spec:
+      # Defines the containers to be deployed in the pods.
+      containers:
+        - name: book-catalog
+          # The Docker image that will be used to create containers. It’s assumed that the latest version of the book_catalog image is used.
+          image: book_catalog:1
+          # The image pull policy determines when the image should be pulled. IfNotPresent means that the image will only be pulled if it doesn’t already exist on the node.
+          imagePullPolicy: Never
+          # The port that the container exposes for communication. This is the port your FastAPI application listens on inside the container.
+          ports:
+            - containerPort: 8000
+          # Environment variables that will be available to the container. In this case, the DATABASE_URL environment variable is set to the value stored in the db-credentials secret.
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DATABASE_URL
+---
+# Specifies the API version being used. For services, v1 is appropriate.
+apiVersion: v1
+# Declares the type of Kubernetes resource being created, in this case, a Service.
+kind: Service
+# Metadata section provides identifying information about the Service.
+metadata:
+  # The name of the Service, which must be unique within the namespace.
+  name: book-catalog-service
+# Specifies the desired state for the service.
+spec:
+  # The selector is used to identify which pods this Service will target. This matches the label set in the Deployment.
+  selector:
+    app: book-catalog
+  # Defines the ports that the service will expose.
+  ports:
+    - protocol: TCP
+      # The port on which the service will be exposed to the outside world.
+      port: 80
+      # The port on the container to which traffic will be forwarded.
+      targetPort: 8000
+      # The node port on which the service will be accessible externally.
+      nodePort: 30007
+  # The type of service to create. NodePort will expose the service on a port accessible from the outside.
+  type: NodePort
