@@ -1,6 +1,6 @@
 6.2P: Cloud-Native DevOps Project(Part2 of 5)
 Background
-Our University Library is a cornerstone of academic resources, aims to enhanceaccessibility to educational materials through an advanced online platform. Youhas been asked to develop a cloud-native microservices architecture to supportthelibrary’s diverse user base and streamline deployment processes. This project isdivided into 5 parts as follows:
+Our University Library is a cornerstone of academic resources, aims to enhance accessibility to educational materials through an advanced online platform. You have been asked to develop a cloud-native microservices architecture to supportthelibrary’s diverse user base and streamline deployment processes. This project isdivided into 5 parts as follows:
 No. Title Task1 Deploying Microservice with PostgreSQL on Render Task4.2P2 Containerizing Microservices with Docker and Deploying to Local
 Kubernetes
 Task6.2P3 Containerizing Microservices with Docker and Deploying to Azure
